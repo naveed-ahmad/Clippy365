@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <title>Clippy365</title>
+        <!-- Add the stylesheet to the head -->
+        <link rel="stylesheet" type="text/css" href="clippy.css" media="all">
+        <!-- Add these scripts to  the bottom of the page -->
+        <!-- jQuery 1.7+ -->
+        <script src="jquery-1.11.1.js"></script>
+
+        <!-- Clippy.js -->
+        <script src="clippy.js"></script>
+
+		<script src="https://appsforoffice.microsoft.com/lib/1.0/hosted/office.js"></script>
+		<script>			
+			Office.initialize = function (reason) {
+				// Checks for the DOM to load using the jQuery ready function.
+				$(document).ready(function () {
+				// After the DOM is loaded, app-specific code can run.
+				// Add any initialization logic to this function.
+					clippy.load('Clippy', function(agent){
+						// do anything with the loaded agent
+						agent.show();
+					});
+				});
+			}
+		</script>
+		
+    </head>
+    <body>
+        
+    </body>
+</html>
+
