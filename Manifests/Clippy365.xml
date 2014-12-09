@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ContentApp">
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="TaskPaneApp">
 	<Id>de7243e9-f9af-4b30-b8ad-99dc92cc64d8</Id>
 	<Version>1.0</Version>
 	<ProviderName>Microsoft</ProviderName>
@@ -9,10 +9,9 @@
 	<IconUrl DefaultValue="Clippy.jpg"/>
 	<Capabilities>
 		<Capability Name="Document"/>
-		<Capability Name="Workbook"/>
 	</Capabilities>
 	<DefaultSettings>
-		<SourceLocation DefaultValue="Clippy.html"/>
+		<SourceLocation DefaultValue="\\localhost\Clippy365\Clippy365\Clippy.html"/>
 	</DefaultSettings>
 	<Permissions>ReadWriteDocument</Permissions>
 </OfficeApp>
