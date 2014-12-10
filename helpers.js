@@ -7,9 +7,19 @@ function clearLog(){
 }
 
 function doActivity() {
-        log(document.getElementById("activity").value );        
-
 }
+
+function showAnimations(value, index, ar) {
+    var activities = document.getElementById('activity').innerHTML
+	activities += "<option value=" + value + ">" + value + "</option>"
+	document.getElementById('activity').innerHTML = activities
+}
+
+function showActivities() {
+		var animations = this.agent.animations();
+		animations.forEach(showAnimations);
+}
+
 /************************* SNOW *****************************/
 
 var snowStarted = false;
