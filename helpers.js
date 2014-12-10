@@ -7,7 +7,19 @@ function clearLog(){
 }
 
 function doActivity() {
-	log(document.getElementById("activity").value);
+	this.agent.play(document.getElementById("activity").value);
+}
+
+
+function showAnimations(value, index, ar) {
+    var activities = document.getElementById('activity').innerHTML
+	activities += "<option value=" + value + ">" + value + "</option>"
+	document.getElementById('activity').innerHTML = activities
+}
+
+function showActivities() {
+		var animations = this.agent.animations();
+		animations.forEach(showAnimations);
 }
 
 // Get all of the content from a Word document in 1KB chunks of text.
