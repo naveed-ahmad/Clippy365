@@ -2,8 +2,19 @@ function log(message){
 	document.getElementById('debuglog').innerHTML = document.getElementById('debuglog').innerHTML + "<br>" + message;
 }
 
+function clearLog(){
+ if (document.getElementById("activity").value == "Searching"){
+        document.getElementById("message").innerHTML = "Common message";
+    }     
+    else{
+        document.getElementById("message").innerHTML = "Having a Baby!!";
+    }    
+	document.getElementById('debuglog').innerHTML = ""
+}
 
-
+function doActivity() {
+        log(document.getElementById("activity").value );        
+}
 /************************* SNOW *****************************/
 
 window.onload = function(){
