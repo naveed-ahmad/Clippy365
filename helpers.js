@@ -2,107 +2,121 @@ function log(message){
 	document.getElementById('debuglog').innerHTML = document.getElementById('debuglog').innerHTML + "<br>" + message;
 }
 
-function clearLog(){
- if (document.getElementById("activity").value == "Searching"){
-        document.getElementById("message").innerHTML = "Common message";
-    }     
-    else{
-        document.getElementById("message").innerHTML = "Having a Baby!!";
-    }    
+function clearLog(){    
 	document.getElementById('debuglog').innerHTML = ""
 }
 
 function doActivity() {
         log(document.getElementById("activity").value );        
+
 }
 /************************* SNOW *****************************/
 
-window.onload = function(){
+var snowStarted = false;
+
+function snowToggle(){
+	if(snowStarted){
+		snowStop();
+	} else {
+		snowStart();
+	}
+}
+
+function snowStart(){
 	//canvas init
-	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext("2d");
+	
+	document.getElementById("body").style.background = '#6b92b9';	
+	this.snowcanvas = document.getElementById("canvas");
+	this.snowctx = snowcanvas.getContext("2d");
 	
 	//canvas dimensions
-	var W = window.innerWidth;
-	var H = window.innerHeight;
-	canvas.width = W;
-	canvas.height = H;
+	this.snowW = window.innerWidth - 20;
+	this.snowH = window.innerHeight - 80;
+	this.snowcanvas.width = this.snowW;
+	this.snowcanvas.height = this.snowH;
 	
 	//snowflake particles
-	var mp = 25; //max particles
-	var particles = [];
-	for(var i = 0; i < mp; i++)
+	this.snowmp = 25; //max particles
+	this.snowparticles = [];
+	for(var i = 0; i < snowmp; i++)
 	{
-		particles.push({
-			x: Math.random()*W, //x-coordinate
-			y: Math.random()*H, //y-coordinate
+		this.snowparticles.push({
+			x: Math.random()*snowW, //x-coordinate
+			y: Math.random()*snowH, //y-coordinate
 			r: Math.random()*4+1, //radius
-			d: Math.random()*mp //density
+			d: Math.random()*snowmp //density
 		})
 	}
+	log('Starting snow');
+	this.snowInterval = setInterval(snowDraw, 33);
+	snowStarted = true;
+}
 	
-	//Lets draw the flakes
-	function draw()
+function snowStop(){
+	document.getElementById("body").style.background = '#FFF';
+	clearInterval(this.snowInterval);
+	this.snowcanvas.width = 0;
+	this.snowcanvas.height = 0;
+	this.snowStarted = false;
+	log('Stopping snow');
+}
+//Lets draw the flakes
+function snowDraw()
+{
+	snowctx.clearRect(0, 0, snowW, snowH);
+	snowctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+	snowctx.beginPath();
+	for(var i = 0; i < snowmp; i++)
 	{
-		ctx.clearRect(0, 0, W, H);
-		
-		ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
-		ctx.beginPath();
-		for(var i = 0; i < mp; i++)
-		{
-			var p = particles[i];
-			ctx.moveTo(p.x, p.y);
-			ctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
-		}
-		ctx.fill();
-		update();
+		var p = snowparticles[i];
+		snowctx.moveTo(p.x, p.y);
+		snowctx.arc(p.x, p.y, p.r, 0, Math.PI*2, true);
 	}
-	
-	//Function to move the snowflakes
-	//angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
-	var angle = 0;
-	function update()
+	snowctx.fill();
+	snowUpdate();
+}
+
+//Function to move the snowflakes
+//angle will be an ongoing incremental flag. Sin and Cos functions will be applied to it to create vertical and horizontal movements of the flakes
+var snowangle = 0;
+function snowUpdate()
+{
+	snowangle += 0.01;
+	for(var i = 0; i < snowmp; i++)
 	{
-		angle += 0.01;
-		for(var i = 0; i < mp; i++)
+		var p = snowparticles[i];
+		//Updating X and Y coordinates
+		//We will add 1 to the cos function to prevent negative values which will lead flakes to move upwards
+		//Every particle has its own density which can be used to make the downward movement different for each flake
+		//Lets make it more random by adding in the radius
+		p.y += Math.cos(snowangle+p.d) + 1 + p.r/2;
+		p.x += Math.sin(snowangle) * 2;
+		//Sending flakes back from the top when it exits
+		//Lets make it a bit more organic and let flakes enter from the left and right also.
+		if(p.x > snowW+5 || p.x < -5 || p.y > snowH)
 		{
-			var p = particles[i];
-			//Updating X and Y coordinates
-			//We will add 1 to the cos function to prevent negative values which will lead flakes to move upwards
-			//Every particle has its own density which can be used to make the downward movement different for each flake
-			//Lets make it more random by adding in the radius
-			p.y += Math.cos(angle+p.d) + 1 + p.r/2;
-			p.x += Math.sin(angle) * 2;
-			
-			//Sending flakes back from the top when it exits
-			//Lets make it a bit more organic and let flakes enter from the left and right also.
-			if(p.x > W+5 || p.x < -5 || p.y > H)
+			if(i%3 > 0) //66.67% of the flakes
 			{
-				if(i%3 > 0) //66.67% of the flakes
+				snowparticles[i] = {x: Math.random()*snowW, y: -10, r: p.r, d: p.d};
+			}
+			else
+			{
+				//If the flake is exitting from the right
+				if(Math.sin(snowangle) > 0)
 				{
-					particles[i] = {x: Math.random()*W, y: -10, r: p.r, d: p.d};
+					//Enter from the left
+					snowparticles[i] = {x: -5, y: Math.random()*snowH, r: p.r, d: p.d};
 				}
 				else
 				{
-					//If the flake is exitting from the right
-					if(Math.sin(angle) > 0)
-					{
-						//Enter from the left
-						particles[i] = {x: -5, y: Math.random()*H, r: p.r, d: p.d};
-					}
-					else
-					{
-						//Enter from the right
-						particles[i] = {x: W+5, y: Math.random()*H, r: p.r, d: p.d};
-					}
+					//Enter from the right
+					snowparticles[i] = {x: snowW+5, y: Math.random()*snowH, r: p.r, d: p.d};
 				}
 			}
 		}
 	}
-	
-	//animation loop
-	setInterval(draw, 33);
 }
+
 
 /************************* SNOW *****************************/
 
