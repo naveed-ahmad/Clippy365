@@ -38,6 +38,11 @@ function populateAnimations() {
 	document.getElementById('activity').innerHTML = activities
 }
 
+function processDocument(data){
+	log("Document Contents:");
+	log(data);
+}
+
 // Get all of the content from a Word document in 1KB chunks of text.
 function getDocumentContents() {
 	this.fileData = "";
@@ -57,8 +62,8 @@ function getDocumentContents() {
 function collateData(data,finished){
 	this.fileData += data;
 	if(finished){
-		log(this.fileData);
-		this.agent.speak(this.fileData);
+		processDocument(this.fileData);
+		this.documentRunner = setTimeout(getDocumentContents,5000);
 	}
 }
 
