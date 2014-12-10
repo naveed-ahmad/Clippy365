@@ -1,5 +1,5 @@
 function log(message){
-	document.getElementById('debuglog').innerHTML = document.getElementById('debuglog').innerHTML + "<br>" + message;
+	document.getElementById('debuglog').innerHTML = document.getElementById('debuglog').innerHTML + "<br>" + message.replace("\r\n","<br>");
 }
 
 function clearLog(){		
@@ -50,8 +50,7 @@ function populateAnimations() {
 
 
 function processDocument(data){
-	//log("Document Contents:");
-	//log(data);
+	this.documentData = data;
 }
 
 // Get all of the content from a Word document in 1KB chunks of text.

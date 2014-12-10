@@ -95,6 +95,82 @@ function runClippyOption(){
 	log('No callback found');
 }
 
+function scanLetterForTokens(letter){
+	tokens = { 	"addressee":"",
+				"author":"",
+				"greeting":""};
+	
+	parts = letter.replace("\r"," ");
+	parts = parts.replace("\n"," ");
+	parts = parts.replace("  "," ");
+	parts = parts.split(" ");
+	
+	tokens["author"] = "Clippy";
+	
+	// Check the first word for a to
+	var greeting = parts[0].toLowerCase().trim();
+	if(greeting == "to" && (parts[1].toLowerCase() == "who" || parts[2].toLowerCase() == "whom")){
+			//To whom it may concern....
+			tokens["greeting"] = "To";
+			tokens["addressee"] = "whom it may concern, ";
+			return;
+	} else if(greeting == "to"){
+		tokens["greeting"] = "To";
+	} else if(greeting == "dear"){
+		tokens["greeting"] = "Dear";
+	} else {
+		//Don't appear to have a letter
+		log('Not a letter:');
+		return;
+	}
+	
+	//Find addressee:
+	//To Mr Bond, Mrs K Winslow, Dr. James Hunter
+
+	for(var i = 1; i < parts.length; i++){
+		if(parts[i].indexOf(",") > -1){ //Contains a comma
+			log(parts[i]);
+			text = [];
+			for(var j = 1; j <= i; j++){
+				if(j < i){
+					text.push(parts[j]);
+				} else {
+					text.push(parts[j].replace(",",""));
+					break;
+				}
+			}
+			tokens["addressee"] = text.join(" ");
+			break;
+		} 
+	}
+	
+	return tokens;
+}
+
+function insertTemplate(type,data){
+	tokens = scanLetterForTokens(this.documentData);
+	var letter = "";
+	if(type == "personal"){
+		letter = "{GREETING} {ADDRESSEE},\r\n[Write a brief introduction to what your letter is about]\r\n[Write a more detailed explaination here]\r\n[Thank them for your work]\r\nSincerely,\r\n\r\n{AUTHOR}";
+	} else {
+		letter = "{GREETING} {ADDRESSEE},\r\n[Write a brief introduction to what your letter is about (I have no idea what goes into a business letter so I'm pretending)]\r\n[Write a more detailed explaination here]\r\n[Thank them for your work]\r\n\r\nSincerely,\r\n\r\n{AUTHOR}";
+	}
+	
+	log('Checking tokens');
+	if(tokens["greeting"].length == 0){
+		tokens["greeting"] = "Dear";
+	}
+	if(tokens["addressee"].length == 0){
+		tokens["addressee"] = "Sir/Madam";
+	}
+	log('checked tokens');
+	letter = letter.replace("{GREETING}",tokens["greeting"]);
+	letter = letter.replace("{ADDRESSEE}",tokens["addressee"]);
+	letter = letter.replace("{AUTHOR}",tokens["author"]);
+	
+	insertIntoDocument(letter);
+}
+
 function writingLetter(data){
 	if(Object.keys(data).length == 0){
 		//This is the first call so we present the initial options
@@ -121,9 +197,9 @@ function writingLetter(data){
 		case "inserttemplate":
 			if(data["templatetype"]){
 				if(data["templatetype"] == "personal"){
-					insertIntoDocument("If you can read this it means we never got around to writing a template for personal letters.");
+					insertTemplate("personal");
 				} else if(data["templatetype"] == "business"){
-					insertIntoDocument("If you can read this it means we never got around to writing a template for business letters.");
+					insertTemplate("business");
 				}
 			} else {
 				addClippyOptions([
