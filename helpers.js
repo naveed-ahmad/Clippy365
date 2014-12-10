@@ -6,8 +6,13 @@ function clearLog(){
 	document.getElementById('debuglog').innerHTML = "";
 }
 
-function getCallerName(){
-	return getCallerName.caller.name;
+function insertIntoDocument(text){
+	Office.context.document.setSelectedDataAsync(text, function (asyncResult) {
+		var error = asyncResult.error;
+		if (asyncResult.status === "failed"){
+			log(error.name + ": " + error.message);
+		}
+	});
 }
 
 function agentSelectChange() {

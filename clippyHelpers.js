@@ -50,8 +50,6 @@ FULL_OPTIONS = [
 				];
 
 BASE_OPTION = {"name":"unknown","text":"Placeholder text","callback":null};
-
-clippyProcessInformation = 	{};
 	
 function resetClippyProcessInformation(){
 	clippyProcessInformation = {	
@@ -101,8 +99,6 @@ function writingLetter(data){
 	if(Object.keys(data).length == 0){
 		//This is the first call so we present the initial options
 		agent.speak("So you are writing a letter. What would you like help with?");
-		clippyProcessInformation["parent"] = "writingLetter";
-		clippyProcessInformation["data"] = {"helptype":"letteroptions"};
 		addClippyOptions([
 							{
 								"name":"insertTemplate",
@@ -123,10 +119,32 @@ function writingLetter(data){
 	//We were the caller so we are doing letter specific stuff
 	switch(data["type"]){
 		case "inserttemplate":
-			log('Insert template');
+			if(data["templatetype"]){
+				if(data["templatetype"] == "personal"){
+					insertIntoDocument("If you can read this it means we never got around to writing a template for personal letters.");
+				} else if(data["templatetype"] == "business"){
+					insertIntoDocument("If you can read this it means we never got around to writing a template for business letters.");
+				}
+			} else {
+				addClippyOptions([
+							{
+								"name":"personalTemplate",
+								"text":"Insert a personal letter template",
+								"data":{"type":"inserttemplate", "templatetype":"personal"},
+								"callback":writingLetter
+							},
+							{
+								"name":"businessTemplates",
+								"text":"Insert a business letter template",
+								"data":{"type":"inserttemplate", "templatetype":"business"},
+								"callback":writingLetter
+							},
+						]);
+			}
 			break;
 		case "onlinetemplates":
 			log('Online templates');
+			window.open("http://www.bing.com/search?q=letter+templates&go=Submit&qs=n&form=QBLH&pq=letter+templates&sc=8-10&sp=-1&sk=&cvid=45b9636cb4b048bbbe2e1c352e381a45", '_blank');
 			break;
 		default:
 			break;
