@@ -6,6 +6,10 @@ function clearLog(){
 	document.getElementById('debuglog').innerHTML = "";
 }
 
+function getCallerName(){
+	return getCallerName.caller.name;
+}
+
 function agentSelectChange() {
 	//TODO: Fix this
 	log("FIX ME");
