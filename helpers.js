@@ -39,8 +39,8 @@ function populateAnimations() {
 }
 
 function processDocument(data){
-	log("Document Contents:");
-	log(data);
+	//log("Document Contents:");
+	//log(data);
 }
 
 // Get all of the content from a Word document in 1KB chunks of text.

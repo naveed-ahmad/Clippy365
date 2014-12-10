@@ -19,6 +19,8 @@ clippy.Agent = function (path, data, sounds) {
     this._balloon = new clippy.Balloon(this._el);
 
     this._setupEvents();
+	
+	this.reposition();
 };
 
 clippy.Agent.prototype = {
@@ -795,29 +797,14 @@ clippy.Balloon.prototype = {
     _sayWords:function (text, hold, complete) {
         this._active = true;
         this._hold = hold;
-        var words = text.split(/[^\S-]/);
-        var time = this.WORD_SPEAK_TIME;
         var el = this._content;
-        var idx = 1;
-
-
-        this._addWord = $.proxy(function () {
-            if (!this._active) return;
-            if (idx > words.length) {
-                this._active = false;
-                if (!this._hold) {
-                    complete();
-                    this.hide();
-                }
-            } else {
-                el.text(words.slice(0, idx).join(' '));
-                idx++;
-                this._loop = window.setTimeout($.proxy(this._addWord, this), time);
-            }
-        }, this);
-
-        this._addWord();
-
+        
+		el.text(text);
+		
+		if(!this._hold){
+			complete();
+			this.hide();
+		}
     },
 
     close:function () {
