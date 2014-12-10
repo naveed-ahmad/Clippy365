@@ -38,6 +38,8 @@ function populateAnimations() {
 	document.getElementById('activity').innerHTML = activities
 }
 
+
+
 function processDocument(data){
 	//log("Document Contents:");
 	//log(data);

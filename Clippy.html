@@ -6,6 +6,7 @@
         <script src="jquery-1.11.1.js"></script>
         <script src="clippy.js"></script>
 		<script src="helpers.js"></script>
+		<script src="clippyHelpers.js"></script>
 		<script src="https://appsforoffice.microsoft.com/lib/1.0/hosted/office.js"></script>
 		<script>			
 			var agent;
@@ -20,6 +21,7 @@
 						agent.show();
 						populateAgents();
 						populateAnimations();
+						addClippyOptions(FULL_OPTIONS);
 						this.documentRunner = setTimeout(getDocumentContents,5000);
 					});
 				});
@@ -38,6 +40,10 @@
 		<select id="agentSelect" onchange="agentSelectChange()"></select>
 		<select id="activity" onchange="doActivity()"></select> 
 		<br /><br />
+		<div id="clippy-buttons" style="padding-left:20px;padding-right:20px;">
+			
+		</div>
+		<br><br>
 		<p>Debug Log:</p>
 		<p id="debuglog"></p>
 		<canvas id="canvas"></canvas>
