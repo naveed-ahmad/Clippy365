@@ -58,6 +58,7 @@ function collateData(data,finished){
 	this.fileData += data;
 	if(finished){
 		log(this.fileData);
+		this.agent.speak(this.fileData);
 	}
 }
 
