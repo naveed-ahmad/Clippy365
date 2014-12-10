@@ -87,30 +87,37 @@ function writingLetter(){
 }
 
 function createEvent(){
+	agent.speak("Would you like me to scan for events automatically?");
 	addClippyOptions([BASE_OPTION]);
 }
 
 function findLocation(){
+	agent.speak("Would you like me to scan for mentioned locations?");
 	addClippyOptions([BASE_OPTION]);
 }
 
 function findAddress(){
+	agent.speak("Would you like me to scan for addresses?");
 	addClippyOptions([BASE_OPTION]);
 }
 
 function similarImages(){
+	agent.speak("Would you like me to try to find similar images to the ones in your document?");
 	addClippyOptions([BASE_OPTION]);
 }
 
 function wikipedia(){
+	agent.speak("Would you like me to try and find some Wikipedia articles?");
 	addClippyOptions([BASE_OPTION]);
 }
 
 function findPeople(){
+	agent.speak("Would you like me to try and find information about the people in your document?");
 	addClippyOptions([BASE_OPTION]);
 }
 
 function plagiarism(){
+	agent.speak("Would you like me to check your document for possible plagiarism?");
 	addClippyOptions([BASE_OPTION]);
 }
 
