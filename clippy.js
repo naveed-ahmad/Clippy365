@@ -340,9 +340,17 @@ clippy.Agent.prototype = {
         $(window).on('resize', $.proxy(this.reposition, this));
 
         this._el.on('mousedown', $.proxy(this._onMouseDown, this));
+		
+		this._el.on('click', $.proxy(this._onClick, this));
 
         this._el.on('dblclick', $.proxy(this._onDoubleClick, this));
     },
+	
+	_onClick:function() {
+        if (!this.play('ClickedOn')) {
+            this.animate();
+        }
+	},
 
     _onDoubleClick:function () {
         if (!this.play('ClickedOn')) {
