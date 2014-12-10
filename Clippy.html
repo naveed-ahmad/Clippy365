@@ -18,6 +18,7 @@
 						// do anything with the loaded agent
 						this.agent = agent;
 						agent.show();
+						populateAnimations();
 					});
 				});
 			}
@@ -31,7 +32,6 @@
 		<a onclick="log('test');" href="javascript:void(0);">Log Test</a>
 		<a onclick="clearLog();" href="javascript:void(0);">Clear Log</a>
 		<a onclick="getDocumentContents();" href="javascript:void(0);">Document Contents</a>
-		<a onclick="showActivities();" href="javascript:void(0);">Show Activities</a>
 		<br /><br />
 		<select id="activity" onchange="doActivity()">
 		</select> 

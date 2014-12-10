@@ -10,16 +10,14 @@ function doActivity() {
 	this.agent.play(document.getElementById("activity").value);
 }
 
-
-function showAnimations(value, index, ar) {
-    var activities = document.getElementById('activity').innerHTML
-	activities += "<option value=" + value + ">" + value + "</option>"
+function populateAnimations() {
+    var activities = document.getElementById('activity').innerHTML;
+	var animations = this.agent.animations();
+	for(var i = 0; i < animations.length; i++){
+		var animation = animations[i];
+		activities += "<option value=" + animation + ">" + animation + "</option>";
+	}
 	document.getElementById('activity').innerHTML = activities
-}
-
-function showActivities() {
-		var animations = this.agent.animations();
-		animations.forEach(showAnimations);
 }
 
 // Get all of the content from a Word document in 1KB chunks of text.
