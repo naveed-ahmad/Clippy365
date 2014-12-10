@@ -6,6 +6,15 @@ function clearLog(){
 	document.getElementById('debuglog').innerHTML = "";
 }
 
+function insertIntoDocument(text){
+	Office.context.document.setSelectedDataAsync(text, function (asyncResult) {
+		var error = asyncResult.error;
+		if (asyncResult.status === "failed"){
+			log(error.name + ": " + error.message);
+		}
+	});
+}
+
 function agentSelectChange() {
 	//TODO: Fix this
 	log("FIX ME");
@@ -38,9 +47,11 @@ function populateAnimations() {
 	document.getElementById('activity').innerHTML = activities
 }
 
+
+
 function processDocument(data){
-	log("Document Contents:");
-	log(data);
+	//log("Document Contents:");
+	//log(data);
 }
 
 // Get all of the content from a Word document in 1KB chunks of text.
