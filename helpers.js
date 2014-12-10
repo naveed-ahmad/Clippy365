@@ -1,5 +1,5 @@
 function log(message){
-	document.getElementById('debuglog').innerHTML = document.getElementById('debuglog').innerHTML + "<br>" + message;
+	document.getElementById('debuglog').innerHTML = document.getElementById('debuglog').innerHTML + "<br>" + message.replace("\r\n","<br>");
 }
 
 function clearLog(){		
@@ -50,6 +50,7 @@ function populateAnimations() {
 
 
 function processDocument(data){
+	this.documentData = data;
 	log("Document Contents:");
 	var addresses = findAddresses(data);
 	for(var i = 0; i < addresses.length; i++)
