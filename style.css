@@ -8,3 +8,14 @@ body {
 canvas {
 	display: block;
 }
+
+a {
+	border: solid;
+	border-width: 1px;
+	border-color: #000;
+	background: #FFF;
+	margin: 5px;
+	padding: 5px;
+	text-decoration: none;
+	text-color: #000;
+}
