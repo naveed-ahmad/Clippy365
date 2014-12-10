@@ -7,6 +7,11 @@ canvas {
 	display: block;
 }
 
+.clippy-option-button {
+	display: block;
+	padding-top: 10px;
+}
+
 a {
 	border: solid;
 	border-width: 1px;
