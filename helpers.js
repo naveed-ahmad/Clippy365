@@ -6,16 +6,34 @@ function clearLog(){
 	document.getElementById('debuglog').innerHTML = "";
 }
 
+function agentSelectChange() {
+	//TODO: Fix this
+	log("FIX ME");
+	clippy.load(document.getElementById('agentSelect').value, function(agent){
+		// do anything with the loaded agent
+		this.agent = agent;
+		agent.show();
+		populateAnimations();
+	});
+}
+
 function doActivity() {
 	this.agent.play(document.getElementById("activity").value);
 }
 
+function populateAgents(){
+	var agents = ["Clippy","Bonzi","F1","Genie","Genius","Links","Merlin","Peedy","Rocky","Rover"];
+	for(var i = 0; i < agents.length; i++){
+		document.getElementById('agentSelect').innerHTML += '<option value="' + agents[i] + '">' + agents[i] + '</option>';
+	}
+}
+
 function populateAnimations() {
-    var activities = document.getElementById('activity').innerHTML;
+    var activities = "";
 	var animations = this.agent.animations();
 	for(var i = 0; i < animations.length; i++){
 		var animation = animations[i];
-		activities += "<option value=" + animation + ">" + animation + "</option>";
+		activities += '<option value="' + animation + '">' + animation + '</option>';
 	}
 	document.getElementById('activity').innerHTML = activities
 }
