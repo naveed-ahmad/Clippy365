@@ -6,7 +6,6 @@
         <script src="jquery-1.11.1.js"></script>
         <script src="clippy.js"></script>
 		<script src="helpers.js"></script>
-
 		<script src="https://appsforoffice.microsoft.com/lib/1.0/hosted/office.js"></script>
 		<script>			
 			var agent;
@@ -31,6 +30,7 @@
 		<a onclick="agent.speak('When all else fails, bind some paper together. My name is Clippy.');" href="javascript:void(0);">Say Hello</a>
 		<a onclick="log('test');" href="javascript:void(0);">Log Test</a>
 		<a onclick="clearLog();" href="javascript:void(0);">Clear Log</a>
+		<a onclick="getDocumentContents();" href="javascript:void(0);">Document Contents</a>
 		<br /><br />
 		<select id="activity" onchange="doActivity()">
 		   <option value="searching">Searching</option>

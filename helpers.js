@@ -2,14 +2,67 @@ function log(message){
 	document.getElementById('debuglog').innerHTML = document.getElementById('debuglog').innerHTML + "<br>" + message;
 }
 
-function clearLog(){    
-	document.getElementById('debuglog').innerHTML = ""
+function clearLog(){		
+	document.getElementById('debuglog').innerHTML = "";
 }
 
 function doActivity() {
-        log(document.getElementById("activity").value );        
-
+	log(document.getElementById("activity").value);
 }
+
+// Get all of the content from a Word document in 1KB chunks of text.
+function getDocumentContents() {
+	this.fileData = "";
+	Office.context.document.getFileAsync(Office.FileType.Text,{sliceSize: 1000}, function (asyncResult) {
+		if (asyncResult.status === 'succeeded') {
+			var myFile = asyncResult.value,
+			state = {
+				file: myFile,
+				counter: 0,
+				sliceCount: myFile.sliceCount
+			};
+			getSliceData(state);
+		}
+	});
+}
+
+function collateData(data,finished){
+	this.fileData += data;
+	if(finished){
+		log(this.fileData);
+	}
+}
+
+// Get a slice from the file, as specified by
+// the counter contained in the state parameter.
+function getSliceData(state) {
+	state.file.getSliceAsync(
+		state.counter,
+		function (result) {
+			var slice = result.value,
+			data = slice.data;
+			state.counter++;
+			// Do something with the data.
+			// Check to see if the final slice in the file has
+			// been reached—if not, get the next slice;
+			// if so, close the file.
+			if (state.counter < state.sliceCount) {
+				collateData(data,false);
+				getSliceData(state);
+			} else {
+				collateData(data, true);
+				closeFile(state);
+			}
+		}
+	);
+}
+// Close the file when done with it.
+function closeFile(state) {
+	state.file.closeAsync(function (results) {
+		// Inform the user that the process is complete.
+	});
+}
+
 /************************* SNOW *****************************/
 
 var snowStarted = false;
