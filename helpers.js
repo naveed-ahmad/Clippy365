@@ -7,6 +7,7 @@ function clearLog(){
 }
 
 function doActivity() {
+	this.agent.play(document.getElementById("activity").value)
 }
 
 function showAnimations(value, index, ar) {
