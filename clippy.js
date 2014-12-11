@@ -348,6 +348,7 @@ clippy.Agent.prototype = {
 	
 	_onClick:function() {
         if (!this.play('ClickedOn')) {
+			this.clippyInAction = true;
 			agent.speak("What would you like help with?");
             addClippyOptions(FULL_OPTIONS);
         }

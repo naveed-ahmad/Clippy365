@@ -51,7 +51,14 @@ function populateAnimations() {
 
 function processDocument(data){
 	this.documentData = data;
-	log("Document Contents:");
+	if(this.clippyInAction){
+		//We are already doing something.
+		return;
+	}
+	if(!this.ignoreLetter && isLetter(data)){
+		writingLetter({"type":"writing"});
+		return;
+	} 
 	var addresses = findAddresses(data);
 	for(var i = 0; i < addresses.length; i++)
 	{
@@ -79,7 +86,7 @@ function collateData(data,finished){
 	this.fileData += data;
 	if(finished){
 		processDocument(this.fileData);
-		this.documentRunner = setTimeout(getDocumentContents,5000);
+		this.documentRunner = setTimeout(getDocumentContents,2000);
 	}
 }
 
@@ -117,7 +124,13 @@ function findAddresses(text)
 {
 	var expression = /((?:\d{1,5}(?:\ 1\/[234])?(?:\x20[A-Z](?:[a-z])+)+)\s{1,2})([A-Z](?:[a-z])+(?:\.?)(?:\x20[A-Z](?:[a-z])+){0,2})\,\x20(A[LKSZRAP]|C[AOT]|D[EC]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHJMVY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])\x20((?!0{5})\d{5}(?:-\d {4})?)/gim; // /(?n:(<address1>))\s{1,2}(?i:(?<address2>(((APT|BLDG|DEPT|FL|HNGR|LOT|PIER|RM|S(LIP|PC|T(E|OP))|TRLR|UNIT)\x20\w{1,5})|(BSMT|FRNT|LBBY|LOWR|OFC|PH|REAR|SIDE|UPPR)\.?)\s{1,2})?)(<city>)\,\x20(<state>)\x20(<zipcode>))/gim;
 	var matches = text.match(expression);
-	return matches;
+	if(matches == null){
+		return [];
+	}
+	for(var i = 0; i < matches.length; i++){
+		addresses.push('' + matches[i]); //Cast to string
+	}
+	return addresses;
 }
 
 /************************* SNOW *****************************/
