@@ -295,7 +295,7 @@ function findAddress(data){
 	if(Object.keys(data).length == 0){
 		//This is the first call so we list the addresses
 		var addresses = scanForAddresses(this.documentData);
-		if(addresses != null)
+		if ((addresses != null) && (0 != addresses.length))
 		{
 			agent.speak("These are the addresses I found.  Would you like me map the address?");
 			var options = new Array();
@@ -317,7 +317,7 @@ function findAddress(data){
 	}
 	else {
 		agent.speak("Looking for address '" + data["location"] + "'");
-		addClippyOptions([BASE_OPTION]);
+		gotoAddress(data["location"]);
 	}
 }
 

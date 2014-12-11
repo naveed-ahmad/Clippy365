@@ -224,4 +224,14 @@ function snowUpdate()
 
 
 /************************* SNOW *****************************/
+function gotoAddress(address)
+{
+	w=800 
+	h=600 
+	if (window.screen) { 
+		 w = window.screen.availWidth; 
+		 h = window.screen.availHeight; 
+	} 
+	window.open('http://www.bing.com/maps/default.aspx?where1=' + address,'newwin','width='+w+',height='+h+',top=0,left=0'); 
+}
 
