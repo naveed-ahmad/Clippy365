@@ -13,7 +13,7 @@ FULL_OPTIONS = [
 					},
 					{
 						"name":"findLocation",
-						"text":"Find information about a location",
+						"text":"Find a location",
 						"data":{},
 						"callback":findLocation
 					},
@@ -50,6 +50,7 @@ FULL_OPTIONS = [
 				];
 
 BASE_OPTION = {"name":"unknown","text":"Placeholder text","callback":null};
+var Locations = ["space needle", "Eiffel Tower", "yosemite", "paris", "london", "disneyland", "edimburgh", "glasgow", "scotland", "microsoft", "yellowstone"];
 
 function clearPane(animation)
 {
@@ -188,6 +189,24 @@ function scanForAddresses(text)
 	return matches;
 }
 
+function scanForLocations()
+{
+	agent.stopSpeaking();
+	agent.speak("Searching ...");
+	agent.play("CheckingSomething");
+	matches = []
+	for( i = 0; i < Locations.length; i++)
+	{
+		loc = Locations[i].toLowerCase();
+		data = this.documentData.toLowerCase();
+		if (-1 != data.indexOf(loc))
+		{			
+			matches.push(Locations[i]);
+		}
+	}
+	return matches;
+}
+
 function insertTemplate(type,data){
 	tokens = scanLetterForTokens(documentData);
 	var letter = "";
@@ -302,11 +321,6 @@ function createEvent(data){
 	addClippyOptions([BASE_OPTION]);
 }
 
-function findLocation(data){
-	agent.speak("Would you like me to scan for mentioned locations?");
-	addClippyOptions([BASE_OPTION]);
-}
-
 function findAddress(data){
 	if(Object.keys(data).length == 0){
 		//This is the first call so we list the addresses
@@ -338,7 +352,41 @@ function findAddress(data){
 	else {
 		clearPane();
 		agent.speak("Looking for address '" + data["location"] + "'");
-		gotoAddress(data["location"]);
+		gotoMap(data["location"]);
+	}
+}
+
+function findLocation(data){
+	if(Object.keys(data).length == 0){
+		var locations = scanForLocations();
+		if ((locations != null) && (0 != locations.length))
+		{
+			agent.stopSpeaking();
+			agent.play("Congratulate");
+			agent.speak("These are the locations I found.  Would you like me to map them?");
+			var options = new Array();
+			for(var i = 0; i < locations.length; i++)
+			{
+				options[i] = {
+								"name":"Location" + i,
+								"text":locations[i],
+								"data":{"location":locations[i]},
+								"callback":findLocation
+							}
+			}
+			addClippyOptions(options);
+			return;
+		}
+		else{
+			agent.play("alert");
+			agent.speak("Sorry, I didn't find any locations.");
+			clearPane();
+		}
+	}
+	else {
+		clearPane();
+		agent.speak("Looking for location '" + data["location"] + "'");
+		gotoMap(data["location"]);
 	}
 }
 
