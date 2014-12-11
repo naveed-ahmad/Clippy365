@@ -818,6 +818,12 @@ clippy.Balloon.prototype = {
         var el = this._content;
         
 		el.text(text);
+		
+				
+		if(!this._hold){
+			complete();
+			this.hide();
+		}
     },
 
     close:function () {
