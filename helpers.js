@@ -228,7 +228,7 @@ function snowUpdate()
 
 
 /************************* SNOW *****************************/
-function gotoAddress(address)
+function gotoMap(location)
 {
 	w=800 
 	h=600 
@@ -236,6 +236,6 @@ function gotoAddress(address)
 		 w = window.screen.availWidth; 
 		 h = window.screen.availHeight; 
 	} 
-	window.open('http://www.bing.com/maps/default.aspx?where1=' + address,'newwin','width='+w+',height='+h+',top=0,left=0'); 
+	window.open('http://www.bing.com/maps/default.aspx?where1=' + location,'newwin','width='+w+',height='+h+',top=0,left=0'); 
 }
 
