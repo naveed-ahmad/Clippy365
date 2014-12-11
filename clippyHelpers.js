@@ -65,7 +65,6 @@ function addClippyOptions(options){
 }
 
 function runClippyOption(){
-	log('Running clippy option');
 	var buttons = document.getElementsByName('clippy-option');
 	var selectedValue = "";
 	for(var i = 0; i < buttons.length; i++){
@@ -76,8 +75,6 @@ function runClippyOption(){
 		}
 	}
 	
-	log("Found value");
-	
 	if(selectedValue == ""){
 		log("Unknown value");
 		return;
@@ -86,11 +83,9 @@ function runClippyOption(){
 	if(selectedValue == "defaultcancel"){
 		log("cancelling");
 		addClippyOptions([]);
-		agent.stop();
+		agent.stopSpeaking();
 		return;
 	}
-	
-	log("Funding callback");
 	
 	for(var i = 0; i < this.currentClippyOptions.length; i++){
 		var option = this.currentClippyOptions[i];
@@ -100,7 +95,7 @@ function runClippyOption(){
 			return;
 		}
 	}
-	log('No callback found');
+	log("No callback found");
 }
 
 function isLetter(data){
@@ -177,14 +172,13 @@ function insertTemplate(type,data){
 		letter = "{GREETING} {ADDRESSEE},\r\n[Write a brief introduction to what your letter is about (I have no idea what goes into a business letter so I'm pretending)]\r\n[Write a more detailed explaination here]\r\n[Thank them for your work]\r\n\r\nSincerely,\r\n\r\n{AUTHOR}";
 	}
 	
-	log('Checking tokens');
 	if(tokens["greeting"].length == 0){
 		tokens["greeting"] = "Dear";
 	}
 	if(tokens["addressee"].length == 0){
 		tokens["addressee"] = "Sir/Madam";
 	}
-	log('checked tokens');
+	
 	letter = letter.replace("{GREETING}",tokens["greeting"]);
 	letter = letter.replace("{ADDRESSEE}",tokens["addressee"]);
 	letter = letter.replace("{AUTHOR}",tokens["author"]);
@@ -193,7 +187,7 @@ function insertTemplate(type,data){
 }
 
 function writingLetter(data){
-	log("writing letter");
+	
 	this.clippyInAction = true;
 	if(Object.keys(data).length == 0){
 		//This is the first call so we present the initial options
@@ -214,7 +208,7 @@ function writingLetter(data){
 						]);
 		return;
 	} 
-	log("Data length: " + data.length);
+	
 	//We were the caller so we are doing letter specific stuff
 	switch(data["type"]){
 		case "writing":
@@ -241,7 +235,6 @@ function writingLetter(data){
 						]);
 			break;
 		case "ignoreletter":
-			log('IgnoreLetter');
 			addClippyOptions([]);
 			this.ignoreLetter = true;
 			agent.stop();

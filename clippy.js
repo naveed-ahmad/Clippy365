@@ -183,6 +183,9 @@ clippy.Agent.prototype = {
         }, this);
     },
 
+	stopSpeaking:function(){
+		this._balloon.stopSpeaking();
+	},
 
     /***
      * Close the current balloon
@@ -787,6 +790,10 @@ clippy.Balloon.prototype = {
         if (this._hidden) return;
         this._balloon.show();
     },
+	
+	stopSpeaking:function(){
+		this._balloon.hide();
+	},
 
     hide:function (fast) {
         if (fast) {
@@ -810,11 +817,6 @@ clippy.Balloon.prototype = {
         var el = this._content;
         
 		el.text(text);
-		
-		if(!this._hold){
-			complete();
-			this.hide();
-		}
     },
 
     close:function () {
