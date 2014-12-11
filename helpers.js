@@ -50,7 +50,7 @@ function populateAnimations() {
 
 
 function processDocument(data){
-	this.documentData = data;
+	documentData = data;
 	if(this.clippyInAction){
 		//We are already doing something.
 		return;

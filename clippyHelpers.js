@@ -164,7 +164,7 @@ function scanLetterForTokens(letter){
 }
 
 function insertTemplate(type,data){
-	tokens = scanLetterForTokens(this.documentData);
+	tokens = scanLetterForTokens(documentData);
 	var letter = "";
 	if(type == "personal"){
 		letter = "{GREETING} {ADDRESSEE},\r\n[Write a brief introduction to what your letter is about]\r\n[Write a more detailed explaination here]\r\n[Thank them for your work]\r\nSincerely,\r\n\r\n{AUTHOR}";
@@ -187,7 +187,6 @@ function insertTemplate(type,data){
 }
 
 function writingLetter(data){
-	
 	this.clippyInAction = true;
 	if(Object.keys(data).length == 0){
 		//This is the first call so we present the initial options
@@ -298,8 +297,62 @@ function wikipedia(data){
 }
 
 function findPeople(data){
-	agent.speak("Would you like me to try and find information about the people in your document?");
-	addClippyOptions([BASE_OPTION]);
+	this.clippyInAction = true;
+	if(Object.keys(data).length == 0){
+		agent.speak("Would you like me to try and find information about the people in your document?");
+		addClippyOptions([
+							{
+								"name":"yes",
+								"text":"Yes",
+								"data":{"result":"yes"},
+								"callback":findPeople
+							},
+							{
+								"name":"no",
+								"text":"No",
+								"data":{"result":"no"},
+								"callback":findPeople
+							}
+						]);
+		return;
+	}
+	
+	log('Checking results: ' + documentData);
+	//We were the caller so we are doing letter specific stuff
+	if(data["result"] == "yes"){
+		log('Got a yes result');
+		var text = documentData;
+		if(text != null){
+			log('Looking for famous people');
+			text = text.replace(/[^a-zA-Z ]/g, '');
+			text = text.split(" ");
+			var famousPeople = [];
+			log(text);
+			for(var i = 0; i < text.length - 1; i++){
+				var testname = text[i] + ' ' + text[i+1];
+				var result = famousPerson(testName);
+				if(result.length != 0){
+					famousPeople.push(result);
+				}
+			}
+			log(famousPeople);
+		} else {
+			log('Text was null');
+		}
+	} 
+	
+	addClippyOptions([]);
+	agent.stop();
+	this.clippyInAction = false;
+}
+
+function famousPerson(name){
+	for(var i = 0; i < this.famous_people.length; i++){
+		if(this.famous_people[i].toLowerCase().trim() == name.toLowerCase().trim()){
+			return this.famous_people[i];
+		}
+	}
+	return "";
 }
 
 function plagiarism(data){
