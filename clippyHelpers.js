@@ -327,8 +327,67 @@ function similarImages(data){
 }
 
 function wikipedia(data){
-	agent.speak("Would you like me to try and find some Wikipedia articles?");
-	addClippyOptions([BASE_OPTION]);
+	this.clippyInAction = true;
+	if(Object.keys(data).length == 0){
+		agent.speak("Would you like me to try and find some Wikipedia articles?");
+		addClippyOptions([
+							{
+								"name":"yes",
+								"text":"Yes",
+								"data":{"type":"result","result":"yes"},
+								"callback":wikipedia
+							},
+							{
+								"name":"no",
+								"text":"No",
+								"data":{"type":"result","result":"no"},
+								"callback":wikipedia
+							}
+						]);
+		return;
+	}
+	
+	//We were the caller so we are doing letter specific stuff
+	if(data["type"] == "result"){
+		if(data["result"] == "yes"){
+			log('Got a yes result');
+			var text = documentData;
+			if(text != null){
+				log('Looking for wikipedia articles');
+				text = text.replace(/[^a-zA-Z ]/g, '');
+				text = text.split(" ");
+				var articles = [];
+				for(var i = 0; i < text.length; i++){
+					if(text[i].charAt(0) === text[i].charAt(0).toLowerCase()){
+						continue;
+					}
+					var result = famousThing(text[i]);
+					if(result.length != 0){
+						articles.push(result);
+					}
+				}
+				var articleOptions = [];
+				for(var i = 0; i < articles.length; i++){
+					articleOptions.push({
+						"name":articles[i],
+						"text":articles[i],
+						"data":{"type":"article","article":articles[i]},
+						"callback":wikipedia
+					});
+				}
+				addClippyOptions(articleOptions);
+			} else {
+				log('Text was null');
+			}
+		} else {
+			addClippyOptions([]);
+		}
+		agent.stop();
+		this.clippyInAction = false;
+	} else if(data["type"] == "article"){
+		log('Finding data on: ' + data["article"]);
+		document.getElementById("content-div").innerHTML = getWikipediaArticle(data["article"]);
+	}
 }
 
 function findPeople(data){
@@ -390,6 +449,14 @@ function findPeople(data){
 	} else if(data["type"] == "person"){
 		log('Finding data on: ' + data["person"]);
 		document.getElementById("content-div").innerHTML = getWikipediaArticle(data["person"]);
+	}
+}
+
+function famousThing(thing){
+	if(word_list.indexOf(thing.toLowerCase()) == -1){
+		return thing;
+	} else {
+		return "";
 	}
 }
 
