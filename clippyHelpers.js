@@ -165,7 +165,7 @@ function scanLetterForTokens(letter){
 
 function scanForAddresses(text)
 {
-	var expression = /((?:\d{1,5}(?:\ 1\/[234])?(?:\x20[A-Z](?:[a-z])+)+)\s{1,2})([A-Z](?:[a-z])+(?:\.?)(?:\x20[A-Z](?:[a-z])+){0,2})\,\x20(A[LKSZRAP]|C[AOT]|D[EC]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHJMVY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])\x20((?!0{5})\d{5}(?:-\d {4})?)/gim; // /(?n:(<address1>))\s{1,2}(?i:(?<address2>(((APT|BLDG|DEPT|FL|HNGR|LOT|PIER|RM|S(LIP|PC|T(E|OP))|TRLR|UNIT)\x20\w{1,5})|(BSMT|FRNT|LBBY|LOWR|OFC|PH|REAR|SIDE|UPPR)\.?)\s{1,2})?)(<city>)\,\x20(<state>)\x20(<zipcode>))/gim;
+	var expression = /\d{1,5} ([A-Za-z0-9]+ ?){2,5}, ([A-Za-z0-9]+, )?\w+, \w+,? \d{5}/g;
 	var matches = this.documentData.match(expression);
 	if(matches == null){
 		matches = [];
@@ -339,46 +339,58 @@ function findPeople(data){
 							{
 								"name":"yes",
 								"text":"Yes",
-								"data":{"result":"yes"},
+								"data":{"type":"result","result":"yes"},
 								"callback":findPeople
 							},
 							{
 								"name":"no",
 								"text":"No",
-								"data":{"result":"no"},
+								"data":{"type":"result","result":"no"},
 								"callback":findPeople
 							}
 						]);
 		return;
 	}
 	
-	log('Checking results: ' + documentData);
 	//We were the caller so we are doing letter specific stuff
-	if(data["result"] == "yes"){
-		log('Got a yes result');
-		var text = documentData;
-		if(text != null){
-			log('Looking for famous people');
-			text = text.replace(/[^a-zA-Z ]/g, '');
-			text = text.split(" ");
-			var famousPeople = [];
-			log(text);
-			for(var i = 0; i < text.length - 1; i++){
-				var testname = text[i] + ' ' + text[i+1];
-				var result = famousPerson(testName);
-				if(result.length != 0){
-					famousPeople.push(result);
+	if(data["type"] == "result"){
+		if(data["result"] == "yes"){
+			log('Got a yes result');
+			var text = documentData;
+			if(text != null){
+				log('Looking for famous people');
+				text = text.replace(/[^a-zA-Z ]/g, '');
+				text = text.split(" ");
+				var famousPeople = [];
+				for(var i = 0; i < text.length - 1; i++){
+					var testName = text[i] + ' ' + text[i+1];
+					var result = famousPerson(testName);
+					if(result.length != 0){
+						famousPeople.push(result);
+					}
 				}
+				var famousOptions = [];
+				for(var i = 0; i < famousPeople.length; i++){
+					famousOptions.push({
+						"name":famousPeople[i],
+						"text":famousPeople[i],
+						"data":{"type":"person","person":famousPeople[i]},
+						"callback":findPeople
+					});
+				}
+				addClippyOptions(famousOptions);
+			} else {
+				log('Text was null');
 			}
-			log(famousPeople);
 		} else {
-			log('Text was null');
+			addClippyOptions([]);
 		}
-	} 
-	
-	addClippyOptions([]);
-	agent.stop();
-	this.clippyInAction = false;
+		agent.stop();
+		this.clippyInAction = false;
+	} else if(data["type"] == "person"){
+		log('Finding data on: ' + data["person"]);
+		document.getElementById("content-div").innerHTML = getWikipediaArticle(data["person"]);
+	}
 }
 
 function famousPerson(name){
