@@ -346,15 +346,31 @@ clippy.Agent.prototype = {
 		
 		this._el.on('click', $.proxy(this._onClick, this));
 
+		this._el.on('mouseup', $.proxy(this._onMouseUp, this));
+
         this._el.on('dblclick', $.proxy(this._onDoubleClick, this));
     },
 	
 	_onClick:function() {
         if (!this.play('ClickedOn')) {
 			this.clippyInAction = true;
+			clearPane();
 			agent.speak("What would you like help with?");
             addClippyOptions(FULL_OPTIONS);
         }
+	},
+
+	_onMouseUp:function() {
+        //var mouseX = e.pageX;
+        //var mouseY = e.pageY;
+		//log(mouseX + ", " + mouseY);
+		log("MouseUp");
+        //if (!this.play('ClickedOn')) {
+		//	this.clippyInAction = true;
+		//	clearPane();
+		//	agent.speak("What would you like help with?");
+        //    addClippyOptions(FULL_OPTIONS);
+        //}
 	},
 
     _onDoubleClick:function () {

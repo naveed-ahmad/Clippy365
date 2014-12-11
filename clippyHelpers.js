@@ -50,7 +50,19 @@ FULL_OPTIONS = [
 				];
 
 BASE_OPTION = {"name":"unknown","text":"Placeholder text","callback":null};
-	
+
+function clearPane(animation)
+{
+	document.getElementById('clippy-buttons').innerHTML = "";
+	document.getElementById('content-div').innerHTML = "";
+	document.getElementById('debuglog').innerHTML = "";
+	agent.stopSpeaking();
+	agent.stop();
+	if(animation)
+	{
+		agent.play(animation);
+	}
+}	
 
 function addClippyOptions(options){
 	log("Options");
@@ -165,6 +177,9 @@ function scanLetterForTokens(letter){
 
 function scanForAddresses(text)
 {
+	agent.stopSpeaking();
+	agent.speak("Searching ...");
+	agent.play("CheckingSomething");
 	var expression = /\d{1,5} ([A-Za-z0-9]+ ?){2,5}, ([A-Za-z0-9]+, )?\w+, \w+,? \d{5}/g;
 	var matches = this.documentData.match(expression);
 	if(matches == null){
@@ -255,6 +270,7 @@ function writingLetter(data){
 				} else if(data["templatetype"] == "business"){
 					insertTemplate("business");
 				}
+				clearPane();
 			} else {
 				addClippyOptions([
 							{
@@ -297,6 +313,8 @@ function findAddress(data){
 		var addresses = scanForAddresses(this.documentData);
 		if ((addresses != null) && (0 != addresses.length))
 		{
+			agent.stopSpeaking();
+			agent.play("Congratulate");
 			agent.speak("These are the addresses I found.  Would you like me map the address?");
 			var options = new Array();
 			for(var i = 0; i < addresses.length; i++)
@@ -312,10 +330,13 @@ function findAddress(data){
 			return;
 		}
 		else{
+			agent.play("alert");
 			agent.speak("Sorry, I didn't find any addresses.");
+			clearPane();
 		}
 	}
 	else {
+		clearPane();
 		agent.speak("Looking for address '" + data["location"] + "'");
 		gotoAddress(data["location"]);
 	}
