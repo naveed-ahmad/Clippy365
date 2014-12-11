@@ -348,14 +348,21 @@ function similarImages(data){
 }
 
 function wikipedia(data){
+	//debugger;
 	this.clippyInAction = true;
 	var text = documentData;
+	var hardcoded_words = ["snowman"];
 	if(Object.keys(data).length == 0){
 		log('Looking for wikipedia articles');
 		text = text.replace(/[^a-zA-Z ]/g, '');
 		text = text.split(" ");
 		var articles = [];
 		for(var i = 0; i < text.length; i++){
+			var specialCase = hardcoded_words.indexOf(text[i].toLowerCase().trim()) != -1;
+			if(specialCase){
+				articles.push(text[i]);
+				continue;
+			}
 			if(text[i].charAt(0) === text[i].charAt(0).toLowerCase()){
 				continue;
 			}
@@ -376,6 +383,8 @@ function wikipedia(data){
 		}
 		addClippyOptions(articleOptions);
 		agent.stop();
+		agent.stopSpeaking();
+		agent.speak("Here are the things I found in the article.");
 		this.clippyInAction = false;
 	} else {
 		log('Finding data on: ' + data["article"]);
@@ -453,6 +462,3 @@ function plagiarism(data){
 	agent.speak("Would you like me to check your document for possible plagiarism?");
 	addClippyOptions([BASE_OPTION]);
 }
-
-
-

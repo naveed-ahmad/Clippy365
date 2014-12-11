@@ -52,6 +52,10 @@ canvas {
 	cursor: default;
 }
 
+.thumb{
+	display: none;
+}
+
 .hatnote{
 	display:none;
 }
