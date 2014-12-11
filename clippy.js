@@ -10,7 +10,7 @@ clippy.Agent = function (path, data, sounds) {
 
     this._queue = new clippy.Queue($.proxy(this._onQueueEmpty, this));
 
-    this._el = $('<div class="clippy"></div>').hide();
+    this._el = $('<div class="clippy" id="clippy"></div>').hide();
 
     $(document.body).append(this._el);
 
@@ -700,7 +700,7 @@ clippy.Balloon.prototype = {
 
     _setup:function () {
 
-        this._balloon = $('<div class="clippy-balloon"><div class="clippy-tip"></div><div class="clippy-content"></div></div> ').hide();
+        this._balloon = $('<div class="clippy-balloon" id="clippy-balloon"><div class="clippy-tip"></div><div class="clippy-content"></div></div> ').hide();
         this._content = this._balloon.find('.clippy-content');
 
         $(document.body).append(this._balloon);

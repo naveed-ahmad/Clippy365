@@ -1,5 +1,9 @@
 * {margin: 0; padding: 0;}
 
+.debug{
+	display:none !important;
+}
+
 body {
 	background: #FFF;
 	font-family: "Arial", Sans-Serif;
@@ -10,6 +14,8 @@ canvas {
 	z-index: -1000;
 	top: 0;
 	left: 0;
+	background:url("arendelle.jpg");
+	background-size: 100%;
 }
 
 .contentpane{
@@ -60,8 +66,4 @@ canvas {
 
 .reference{
 	display:none;
-}
-
-.debug{
-	/*display:none;*/
 }

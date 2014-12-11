@@ -18,6 +18,8 @@ function insertIntoDocument(text){
 function agentSelectChange() {
 	//TODO: Fix this
 	log("FIX ME");
+	document.getElementById('clippy').parentNode.removeChild(document.getElementById('clippy'));
+	document.getElementById('clippy-balloon').parentNode.removeChild(document.getElementById('clippy-balloon'));
 	clippy.load(document.getElementById('agentSelect').value, function(agent){
 		// do anything with the loaded agent
 		this.agent = agent;
@@ -159,10 +161,12 @@ function snowStart(){
 	
 function snowStop(){
 	document.getElementById("body").style.background = '#FFF';
-	clearInterval(this.snowInterval);
 	this.snowcanvas.width = 0;
 	this.snowcanvas.height = 0;
 	this.snowStarted = false;
+	if(this.snowInterval){
+		clearInterval(this.snowInterval);
+	}
 	log('Stopping snow');
 }
 //Lets draw the flakes

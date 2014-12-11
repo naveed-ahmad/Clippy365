@@ -26,6 +26,8 @@
 						populateAgents();
 						populateAnimations();
 						this.ignoreLetter = false;
+						this.snowcanvas = document.getElementById("canvas");
+						snowStop();
 						this.documentRunner = setTimeout(getDocumentContents,0);
 					});
 				});

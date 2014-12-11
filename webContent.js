@@ -1,16 +1,23 @@
-function getWikipediaArticle(name){
+function getWikipediaArticle(name,agent, callback){
+	agent.stopSpeaking();
+	agent.speak("Searching...");
+	agent.play("Searching");
 	var wikiURL = "http://en.wikipedia.org/w/api.php?action=parse&format=json&prop=text&section=0&page=" + encodeURIComponent(name);
-	var request = new XMLHttpRequest();
-	request.open("GET",wikiURL,false);
-	request.send();
-	if (request.status !== 200) {
-		log("error getting data");
-		return "";
+	xmlhttp = new XMLHttpRequest();
+	xmlhttp.onreadystatechange=function(){
+		if (xmlhttp.readyState==4 && xmlhttp.status==200){
+			var wikiData = jQuery.parseJSON(xmlhttp.responseText);
+			if("parse" in wikiData && "text" in wikiData["parse"] && "*" in wikiData["parse"]["text"]){
+				callback(wikiData["parse"]["text"]["*"]);
+				agent.stopSpeaking();
+			} else {
+				callback("");
+			}
+		} else {
+			callback("");
+		}
 	}
-	var wikiData = jQuery.parseJSON(request.responseText);
-	if("parse" in wikiData && "text" in wikiData["parse"] && "*" in wikiData["parse"]["text"]){
-		return wikiData["parse"]["text"]["*"];
-	} else {
-		return "";
-	}
+	xmlhttp.open("GET",wikiURL,true);
+	xmlhttp.send();
+	
 }
