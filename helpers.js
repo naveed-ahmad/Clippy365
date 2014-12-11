@@ -18,6 +18,8 @@ function insertIntoDocument(text){
 function agentSelectChange() {
 	//TODO: Fix this
 	log("FIX ME");
+	document.getElementById('clippy').parentNode.removeChild(document.getElementById('clippy'));
+	document.getElementById('clippy-balloon').parentNode.removeChild(document.getElementById('clippy-balloon'));
 	clippy.load(document.getElementById('agentSelect').value, function(agent){
 		// do anything with the loaded agent
 		this.agent = agent;

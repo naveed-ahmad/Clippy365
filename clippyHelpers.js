@@ -386,7 +386,7 @@ function wikipedia(data){
 		this.clippyInAction = false;
 	} else if(data["type"] == "article"){
 		log('Finding data on: ' + data["article"]);
-		document.getElementById("content-div").innerHTML = getWikipediaArticle(data["article"]);
+		getWikipediaArticle(data["article"],agent, displayWikiData);
 	}
 }
 
@@ -448,8 +448,12 @@ function findPeople(data){
 		this.clippyInAction = false;
 	} else if(data["type"] == "person"){
 		log('Finding data on: ' + data["person"]);
-		document.getElementById("content-div").innerHTML = getWikipediaArticle(data["person"]);
+		getWikipediaArticle(data["person"],agent,displayWikiData);
 	}
+}
+
+function displayWikiData(text){
+	document.getElementById("content-div").innerHTML = text;
 }
 
 function famousThing(thing){
