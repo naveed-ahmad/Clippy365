@@ -402,6 +402,7 @@ function wikipedia(data){
 	var hardcoded_words = ["snowman"];
 	if(Object.keys(data).length == 0){
 		log('Looking for wikipedia articles');
+		text = text.replace("\r"," ").replace("\n"," ");
 		text = text.replace(/[^a-zA-Z ]/g, '');
 		text = text.split(" ");
 		var articles = [];
