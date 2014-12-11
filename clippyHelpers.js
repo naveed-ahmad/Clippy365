@@ -392,61 +392,38 @@ function uniqueOnly(list){
 function findPeople(data){
 	this.clippyInAction = true;
 	if(Object.keys(data).length == 0){
-		agent.speak("Would you like me to try and find information about the people in your document?");
-		addClippyOptions([
-							{
-								"name":"yes",
-								"text":"Yes",
-								"data":{"type":"result","result":"yes"},
-								"callback":findPeople
-							},
-							{
-								"name":"no",
-								"text":"No",
-								"data":{"type":"result","result":"no"},
-								"callback":findPeople
-							}
-						]);
-		return;
-	}
-	
-	//We were the caller so we are doing letter specific stuff
-	if(data["type"] == "result"){
-		if(data["result"] == "yes"){
-			log('Got a yes result');
-			var text = documentData;
-			if(text != null){
-				log('Looking for famous people');
-				text = text.replace(/[^a-zA-Z ]/g, '');
-				text = text.split(" ");
-				var famousPeople = [];
-				for(var i = 0; i < text.length - 1; i++){
-					var testName = text[i] + ' ' + text[i+1];
-					var result = famousPerson(testName);
-					if(result.length != 0){
-						famousPeople.push(result);
-					}
+		agent.speak("Here are the people I found in your document.");
+		var text = documentData;
+		if(text != null){
+			log('Looking for famous people');
+			text = text.replace(/[^a-zA-Z ]/g, '');
+			text = text.split(" ");
+			var famousPeople = [];
+			for(var i = 0; i < text.length - 1; i++){
+				var testName = text[i] + ' ' + text[i+1];
+				var result = famousPerson(testName);
+				if(result.length != 0){
+					famousPeople.push(result);
 				}
-				var famousOptions = [];
-				for(var i = 0; i < famousPeople.length; i++){
-					famousOptions.push({
-						"name":famousPeople[i],
-						"text":famousPeople[i],
-						"data":{"type":"person","person":famousPeople[i]},
-						"callback":findPeople
-					});
-				}
-				addClippyOptions(famousOptions);
-			} else {
-				log('Text was null');
 			}
+			var famousOptions = [];
+			for(var i = 0; i < famousPeople.length; i++){
+				famousOptions.push({
+					"name":famousPeople[i],
+					"text":famousPeople[i],
+					"data":{"type":"person","person":famousPeople[i]},
+					"callback":findPeople
+				});
+			}
+			addClippyOptions(famousOptions);
 		} else {
-			addClippyOptions([]);
+			log('Text was null');
 		}
 		agent.stop();
 		this.clippyInAction = false;
-	} else if(data["type"] == "person"){
-		log('Finding data on: ' + data["person"]);
+	} else {
+		agent.stopSpeaking();
+		agent.speak('Finding data on: ' + data["person"]);
 		getWikipediaArticle(data["person"],agent,displayWikiData);
 	}
 }
