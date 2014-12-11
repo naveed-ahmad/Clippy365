@@ -4,12 +4,14 @@
 		<link rel="stylesheet" type="text/css" href="style.css" media="all">
         <link rel="stylesheet" type="text/css" href="clippy.css" media="all">
         <script src="jquery-1.11.1.js"></script>
+		<script src="famous.js"></script>
         <script src="clippy.js"></script>
 		<script src="helpers.js"></script>
 		<script src="clippyHelpers.js"></script>
 		<script src="https://appsforoffice.microsoft.com/lib/1.0/hosted/office.js"></script>
 		<script>			
 			var agent;
+			var documentData;
 			Office.initialize = function (reason) {
 				// Checks for the DOM to load using the jQuery ready function.
 				$(document).ready(function () {

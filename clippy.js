@@ -768,6 +768,7 @@ clippy.Balloon.prototype = {
     },
 
     speak:function (complete, text, hold) {
+		this._balloon.hide();
         this._hidden = false;
         this.show();
         var c = this._content;
