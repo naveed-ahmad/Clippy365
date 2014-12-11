@@ -61,9 +61,11 @@ function addClippyOptions(options){
 		var option = options[i];
 		document.getElementById('clippy-buttons').innerHTML += '<span class="clippy-option-button"><input onchange="runClippyOption();" type="radio" name="clippy-option" value="' + option["name"] + '">' + option["text"] + '</span>';
 	}
+	
 }
 
 function runClippyOption(){
+	log('Running clippy option');
 	var buttons = document.getElementsByName('clippy-option');
 	var selectedValue = "";
 	for(var i = 0; i < buttons.length; i++){
@@ -74,17 +76,21 @@ function runClippyOption(){
 		}
 	}
 	
+	log("Found value");
+	
 	if(selectedValue == ""){
 		log("Unknown value");
 		return;
 	}
 	
-	if(selectedvalue == "defaultcancel"){
+	if(selectedValue == "defaultcancel"){
 		log("cancelling");
 		addClippyOptions([]);
 		agent.stop();
 		return;
 	}
+	
+	log("Funding callback");
 	
 	for(var i = 0; i < this.currentClippyOptions.length; i++){
 		var option = this.currentClippyOptions[i];
@@ -187,6 +193,7 @@ function insertTemplate(type,data){
 }
 
 function writingLetter(data){
+	log("writing letter");
 	this.clippyInAction = true;
 	if(Object.keys(data).length == 0){
 		//This is the first call so we present the initial options
@@ -207,7 +214,7 @@ function writingLetter(data){
 						]);
 		return;
 	} 
-	//log("Data length: " + data.length);
+	log("Data length: " + data.length);
 	//We were the caller so we are doing letter specific stuff
 	switch(data["type"]){
 		case "writing":
