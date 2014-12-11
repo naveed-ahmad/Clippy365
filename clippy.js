@@ -352,25 +352,22 @@ clippy.Agent.prototype = {
     },
 	
 	_onClick:function() {
-        if (!this.play('ClickedOn')) {
-			this.clippyInAction = true;
-			clearPane();
-			agent.speak("What would you like help with?");
-            addClippyOptions(FULL_OPTIONS);
-        }
+
 	},
 
 	_onMouseUp:function() {
-        //var mouseX = e.pageX;
-        //var mouseY = e.pageY;
-		//log(mouseX + ", " + mouseY);
+        var upX = window.mouseX;
+        var upY = window.mouseY;
+		if((upX - window.downX)*(upX - window.downX) + (upY - window.downY)*(upY - window.downY) < 25){
+			if (!this.play('ClickedOn')) {
+				this.clippyInAction = true;
+				clearPane();
+				agent.speak("What would you like help with?");
+				addClippyOptions(FULL_OPTIONS);
+			}
+			log("Click");
+		}
 		log("MouseUp");
-        //if (!this.play('ClickedOn')) {
-		//	this.clippyInAction = true;
-		//	clearPane();
-		//	agent.speak("What would you like help with?");
-        //    addClippyOptions(FULL_OPTIONS);
-        //}
 	},
 
     _onDoubleClick:function () {
@@ -411,6 +408,8 @@ clippy.Agent.prototype = {
     },
 
     _onMouseDown:function (e) {
+		window.downX = window.mouseX;
+		window.downY = window.mouseY;
         e.preventDefault();
         this._startDrag(e);
     },
