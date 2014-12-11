@@ -1,4 +1,6 @@
 this.famous_people = ["Adele",
+"Queen Elsa",
+"Princess Anna",
 "Alf",
 "Aristotle",
 "Attenborough",
