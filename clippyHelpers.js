@@ -31,7 +31,7 @@ FULL_OPTIONS = [
 					},
 					{
 						"name":"wikipedia",
-						"text":"Find information about on Wikipedia",
+						"text":"Find information about something on Wikipedia",
 						"data":{},
 						"callback":wikipedia
 					},
