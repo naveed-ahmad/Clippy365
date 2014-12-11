@@ -165,14 +165,11 @@ function scanLetterForTokens(letter){
 
 function scanForAddresses(text)
 {
-log("expressing");
 	var expression = /((?:\d{1,5}(?:\ 1\/[234])?(?:\x20[A-Z](?:[a-z])+)+)\s{1,2})([A-Z](?:[a-z])+(?:\.?)(?:\x20[A-Z](?:[a-z])+){0,2})\,\x20(A[LKSZRAP]|C[AOT]|D[EC]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHJMVY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])\x20((?!0{5})\d{5}(?:-\d {4})?)/gim; // /(?n:(<address1>))\s{1,2}(?i:(?<address2>(((APT|BLDG|DEPT|FL|HNGR|LOT|PIER|RM|S(LIP|PC|T(E|OP))|TRLR|UNIT)\x20\w{1,5})|(BSMT|FRNT|LBBY|LOWR|OFC|PH|REAR|SIDE|UPPR)\.?)\s{1,2})?)(<city>)\,\x20(<state>)\x20(<zipcode>))/gim;
-log("scanning: " + text);
-	var matches = text.match(expression);
+	var matches = this.documentData.match(expression);
 	if(matches == null){
-		return [];
+		matches = [];
 	}
-log("returning");
 	return matches;
 }
 
@@ -297,17 +294,14 @@ function findLocation(data){
 
 function findAddress(data){
 	if(Object.keys(data).length == 0){
-	log("listing addresses");
 		//This is the first call so we list the addresses
 		var addresses = scanForAddresses(this.documentData);
-	log("scanned");
 		if(addresses != null)
 		{
-			agent.speak("These are the addresses I found.  Would you like me to scan for addresses?");
+			agent.speak("These are the addresses I found.  Would you like me map the address?");
 			var options = new Array();
 			for(var i = 0; i < addresses.length; i++)
 			{
-	log("Add Option " + i);
 				options[i] = {
 								"name":"Address" + i,
 								"text":addresses[i],
@@ -315,17 +309,14 @@ function findAddress(data){
 								"callback":findAddress
 							}
 			}
-			log(options);
 			addClippyOptions(options);
 			return;
 		}
 		else{
-		log("no addresses");
 			agent.speak("Sorry, I didn't find any addresses.");
 		}
 	}
 	else {
-	log("looking for address");
 		agent.speak("Looking for address '" + data["location"] + "'");
 		addClippyOptions([BASE_OPTION]);
 	}
