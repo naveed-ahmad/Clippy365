@@ -51,7 +51,14 @@ function populateAnimations() {
 
 function processDocument(data){
 	this.documentData = data;
-	//log("Document Contents:");
+	if(this.clippyInAction){
+		//We are already doing something.
+		return;
+	}
+	if(!this.ignoreLetter && isLetter(data)){
+		writingLetter({"type":"writing"});
+		return;
+	} 
 }
 
 // Get all of the content from a Word document in 1KB chunks of text.
@@ -74,7 +81,7 @@ function collateData(data,finished){
 	this.fileData += data;
 	if(finished){
 		processDocument(this.fileData);
-		this.documentRunner = setTimeout(getDocumentContents,5000);
+		this.documentRunner = setTimeout(getDocumentContents,2000);
 	}
 }
 

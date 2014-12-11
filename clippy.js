@@ -183,6 +183,9 @@ clippy.Agent.prototype = {
         }, this);
     },
 
+	stopSpeaking:function(){
+		this._balloon.stopSpeaking();
+	},
 
     /***
      * Close the current balloon
@@ -348,6 +351,7 @@ clippy.Agent.prototype = {
 	
 	_onClick:function() {
         if (!this.play('ClickedOn')) {
+			this.clippyInAction = true;
 			agent.speak("What would you like help with?");
             addClippyOptions(FULL_OPTIONS);
         }
@@ -786,6 +790,10 @@ clippy.Balloon.prototype = {
         if (this._hidden) return;
         this._balloon.show();
     },
+	
+	stopSpeaking:function(){
+		this._balloon.hide();
+	},
 
     hide:function (fast) {
         if (fast) {
@@ -809,11 +817,6 @@ clippy.Balloon.prototype = {
         var el = this._content;
         
 		el.text(text);
-		
-		if(!this._hold){
-			complete();
-			this.hide();
-		}
     },
 
     close:function () {

@@ -51,19 +51,17 @@ FULL_OPTIONS = [
 
 BASE_OPTION = {"name":"unknown","text":"Placeholder text","callback":null};
 	
-function resetClippyProcessInformation(){
-	clippyProcessInformation = {	
-								"parent":"",
-								"data":{},
-							};
-}
+
 function addClippyOptions(options){
+	log("Options");
 	document.getElementById('clippy-buttons').innerHTML = "";
 	this.currentClippyOptions = options;
+	log("Adding options");
 	for(var i = 0; i < options.length; i++){
 		var option = options[i];
 		document.getElementById('clippy-buttons').innerHTML += '<span class="clippy-option-button"><input onchange="runClippyOption();" type="radio" name="clippy-option" value="' + option["name"] + '">' + option["text"] + '</span>';
 	}
+	
 }
 
 function runClippyOption(){
@@ -80,8 +78,13 @@ function runClippyOption(){
 	if(selectedValue == ""){
 		log("Unknown value");
 		return;
-	} else {
-		log("Selected Value: " + selectedValue);
+	}
+	
+	if(selectedValue == "defaultcancel"){
+		log("cancelling");
+		addClippyOptions([]);
+		agent.stopSpeaking();
+		return;
 	}
 	
 	for(var i = 0; i < this.currentClippyOptions.length; i++){
@@ -92,7 +95,18 @@ function runClippyOption(){
 			return;
 		}
 	}
-	log('No callback found');
+	log("No callback found");
+}
+
+function isLetter(data){
+	var tokens = scanLetterForTokens(data);
+	if(	tokens["addressee"].length != 0 &&
+		tokens["author"].length != 0 &&
+		tokens["greeting"].length != 0)
+	{
+		return true;
+	}
+	return false;
 }
 
 function scanLetterForTokens(letter){
@@ -105,6 +119,10 @@ function scanLetterForTokens(letter){
 	parts = parts.replace("  "," ");
 	parts = parts.split(" ");
 	
+	if(parts.length < 2){
+		return tokens;
+	}
+	
 	tokens["author"] = "Clippy";
 	
 	// Check the first word for a to
@@ -113,15 +131,14 @@ function scanLetterForTokens(letter){
 			//To whom it may concern....
 			tokens["greeting"] = "To";
 			tokens["addressee"] = "whom it may concern, ";
-			return;
+			return tokens;
 	} else if(greeting == "to"){
 		tokens["greeting"] = "To";
 	} else if(greeting == "dear"){
 		tokens["greeting"] = "Dear";
 	} else {
 		//Don't appear to have a letter
-		log('Not a letter:');
-		return;
+		return tokens;
 	}
 	
 	//Find addressee:
@@ -129,7 +146,6 @@ function scanLetterForTokens(letter){
 
 	for(var i = 1; i < parts.length; i++){
 		if(parts[i].indexOf(",") > -1){ //Contains a comma
-			log(parts[i]);
 			text = [];
 			for(var j = 1; j <= i; j++){
 				if(j < i){
@@ -153,6 +169,9 @@ log("expressing");
 	var expression = /((?:\d{1,5}(?:\ 1\/[234])?(?:\x20[A-Z](?:[a-z])+)+)\s{1,2})([A-Z](?:[a-z])+(?:\.?)(?:\x20[A-Z](?:[a-z])+){0,2})\,\x20(A[LKSZRAP]|C[AOT]|D[EC]|F[LM]|G[AU]|HI|I[ADLN]|K[SY]|LA|M[ADEHINOPST]|N[CDEHJMVY]|O[HKR]|P[ARW]|RI|S[CD]|T[NX]|UT|V[AIT]|W[AIVY])\x20((?!0{5})\d{5}(?:-\d {4})?)/gim; // /(?n:(<address1>))\s{1,2}(?i:(?<address2>(((APT|BLDG|DEPT|FL|HNGR|LOT|PIER|RM|S(LIP|PC|T(E|OP))|TRLR|UNIT)\x20\w{1,5})|(BSMT|FRNT|LBBY|LOWR|OFC|PH|REAR|SIDE|UPPR)\.?)\s{1,2})?)(<city>)\,\x20(<state>)\x20(<zipcode>))/gim;
 log("scanning: " + text);
 	var matches = text.match(expression);
+	if(matches == null){
+		return [];
+	}
 log("returning");
 	return matches;
 }
@@ -166,14 +185,13 @@ function insertTemplate(type,data){
 		letter = "{GREETING} {ADDRESSEE},\r\n[Write a brief introduction to what your letter is about (I have no idea what goes into a business letter so I'm pretending)]\r\n[Write a more detailed explaination here]\r\n[Thank them for your work]\r\n\r\nSincerely,\r\n\r\n{AUTHOR}";
 	}
 	
-	log('Checking tokens');
 	if(tokens["greeting"].length == 0){
 		tokens["greeting"] = "Dear";
 	}
 	if(tokens["addressee"].length == 0){
 		tokens["addressee"] = "Sir/Madam";
 	}
-	log('checked tokens');
+	
 	letter = letter.replace("{GREETING}",tokens["greeting"]);
 	letter = letter.replace("{ADDRESSEE}",tokens["addressee"]);
 	letter = letter.replace("{AUTHOR}",tokens["author"]);
@@ -182,6 +200,8 @@ function insertTemplate(type,data){
 }
 
 function writingLetter(data){
+	
+	this.clippyInAction = true;
 	if(Object.keys(data).length == 0){
 		//This is the first call so we present the initial options
 		agent.speak("So you are writing a letter. What would you like help with?");
@@ -201,9 +221,37 @@ function writingLetter(data){
 						]);
 		return;
 	} 
-	//log("Data length: " + data.length);
+	
 	//We were the caller so we are doing letter specific stuff
 	switch(data["type"]){
+		case "writing":
+			agent.speak("Looks like you are writing a letter. Would you like to use some of the help features?");
+			addClippyOptions([
+							{
+								"name":"personalTemplate",
+								"text":"Insert a personal letter template",
+								"data":{"type":"inserttemplate", "templatetype":"personal"},
+								"callback":writingLetter
+							},
+							{
+								"name":"businessTemplates",
+								"text":"Insert a business letter template",
+								"data":{"type":"inserttemplate", "templatetype":"business"},
+								"callback":writingLetter
+							}, 
+							{
+								"name":"cancel",
+								"text":"Cancel",
+								"data":{"type":"ignoreletter"},
+								"callback":writingLetter
+							}
+						]);
+			break;
+		case "ignoreletter":
+			addClippyOptions([]);
+			this.ignoreLetter = true;
+			agent.stop();
+			break;
 		case "inserttemplate":
 			if(data["templatetype"]){
 				if(data["templatetype"] == "personal"){

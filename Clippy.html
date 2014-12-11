@@ -21,7 +21,7 @@
 						agent.show();
 						populateAgents();
 						populateAnimations();
-						resetClippyProcessInformation();
+						this.ignoreLetter = false;
 						this.documentRunner = setTimeout(getDocumentContents,0);
 					});
 				});
@@ -36,6 +36,7 @@
 		<a onclick="log('test');" href="javascript:void(0);">Log Test</a>
 		<a onclick="clearLog();" href="javascript:void(0);">Clear Log</a>
 		<a onclick="getDocumentContents();" href="javascript:void(0);">Document Contents</a>
+		<a onclick="agent.stopSpeaking();" href="javascript:void(0);">Stop Speaking</a>
 		<br /><br />
 		<select id="agentSelect" onchange="agentSelectChange()"></select>
 		<select id="activity" onchange="doActivity()"></select> 
