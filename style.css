@@ -5,6 +5,14 @@ body {
 }
 canvas {
 	display: block;
+	position: absolute;
+	z-index: -1000;
+	top: 0;
+	left: 0;
+}
+
+.contentpane{
+	padding:5px;
 }
 
 .clippy-option-button {
@@ -12,15 +20,22 @@ canvas {
 	padding-top: 10px;
 }
 
+.demo-buttons{
+	width: 100%;
+	float: none;
+}
+
 .demo-button {
 	border: solid;
+	display: block;
+	float: left;
 	border-width: 1px;
 	border-color: #000;
 	background: #FFF;
-	margin: 5px;
-	padding: 5px;
+	margin-right: 5px;
+	margin-bottom: 5px;
+	padding:5px;
 	text-decoration: none;
-	text-color: #000;
 }
 
 .hatnote{
@@ -33,4 +48,8 @@ canvas {
 
 .references{
 	display:none;
+}
+
+.debug{
+	/*display:none;*/
 }

@@ -135,8 +135,8 @@ function snowStart(){
 	this.snowctx = snowcanvas.getContext("2d");
 	
 	//canvas dimensions
-	this.snowW = window.innerWidth - 20;
-	this.snowH = window.innerHeight - 80;
+	this.snowW = window.innerWidth - 0;
+	this.snowH = window.innerHeight - 0;
 	this.snowcanvas.width = this.snowW;
 	this.snowcanvas.height = this.snowH;
 	
