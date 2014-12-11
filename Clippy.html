@@ -6,6 +6,7 @@
         <script src="jquery-1.11.1.js"></script>
 		<script src="famous.js"></script>
         <script src="clippy.js"></script>
+		<script src="webContent.js"></script>
 		<script src="helpers.js"></script>
 		<script src="clippyHelpers.js"></script>
 		<script src="https://appsforoffice.microsoft.com/lib/1.0/hosted/office.js"></script>
@@ -33,18 +34,21 @@
     </head>
     <body id="body">
 		<br />
-		<a onclick="snowToggle();" href="javascript:void(0);">Toggle Snow</a>
-		<a onclick="agent.speak('When all else fails, bind some paper together. My name is Clippy.');" href="javascript:void(0);">Say Hello</a>
-		<a onclick="log('test');" href="javascript:void(0);">Log Test</a>
-		<a onclick="clearLog();" href="javascript:void(0);">Clear Log</a>
-		<a onclick="getDocumentContents();" href="javascript:void(0);">Document Contents</a>
-		<a onclick="agent.stopSpeaking();" href="javascript:void(0);">Stop Speaking</a>
+		<a class="demo-button" onclick="snowToggle();" href="javascript:void(0);">Toggle Snow</a>
+		<a class="demo-button" onclick="agent.speak('When all else fails, bind some paper together. My name is Clippy.');" href="javascript:void(0);">Say Hello</a>
+		<a class="demo-button" onclick="log('test');" href="javascript:void(0);">Log Test</a>
+		<a class="demo-button" onclick="clearLog();" href="javascript:void(0);">Clear Log</a>
+		<a class="demo-button" onclick="getDocumentContents();" href="javascript:void(0);">Document Contents</a>
+		<a class="demo-button" onclick="agent.stopSpeaking();" href="javascript:void(0);">Stop Speaking</a>
 		<br /><br />
 		<select id="agentSelect" onchange="agentSelectChange()"></select>
 		<select id="activity" onchange="doActivity()"></select> 
 		<br /><br />
 		<div id="clippy-buttons" style="padding-left:20px;padding-right:20px;">
 			
+		</div>
+		<div id="content-div" style="padding:5px;">
+		
 		</div>
 		<br><br>
 		<p>Debug Log:</p>
