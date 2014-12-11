@@ -366,6 +366,7 @@ function wikipedia(data){
 						articles.push(result);
 					}
 				}
+				articles = uniqueOnly(articles);
 				var articleOptions = [];
 				for(var i = 0; i < articles.length; i++){
 					articleOptions.push({
@@ -388,6 +389,12 @@ function wikipedia(data){
 		log('Finding data on: ' + data["article"]);
 		getWikipediaArticle(data["article"],agent, displayWikiData);
 	}
+}
+
+function uniqueOnly(list){
+	return list.filter(function(item, pos) {
+		return list.indexOf(item) == pos;
+	})
 }
 
 function findPeople(data){
