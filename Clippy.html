@@ -28,6 +28,9 @@
 						this.ignoreLetter = false;
 						this.snowcanvas = document.getElementById("canvas");
 						snowStop();
+						this.mouseX = 0;
+						this.mouseY = 0;
+						document.onmousemove = handleMouseMove;
 						this.documentRunner = setTimeout(getDocumentContents,0);
 					});
 				});
